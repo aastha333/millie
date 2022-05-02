@@ -57,16 +57,25 @@ const getInterest=async(req,res)=>{
 }
 const selectInterest=async(req,res)=>{
     try{
+        interests.findInterest(req.user,req.query.interest).then(async(val)=>{
+            if(!val){
+                //console.log(val)
+                await interests.select(req.user,req.query.interest).then((data)=>{
+                    //console.log(data)
+                   if(data){
+                       res.json(data)
+                   }
+                   else{
+                       res.json('data not found')
+                   }
+               })
+            }
+            else{
+                res.json("Interest is already added")
+            }
+        })
         //const val=req.user
-        await interests.select(req.user,req.query.interest).then((data)=>{
-         //console.log(data)
-        if(data){
-            res.json(data)
-        }
-        else{
-            res.json('data not found')
-        }
-    })
+       
     }
     catch(err){
         res.json("error")
@@ -76,6 +85,7 @@ const selectInterest=async(req,res)=>{
 const selectSubInterest=async(req,res)=>{
     interests.findInterest(req.user,req.query.subInterest).then(val=>{
         if(!val){
+            //console.log(val)
             interests.findSubInterest(req.user,req.query.subInterest).then(value=>{
                 if(!value){
                     interests.selectSub(req.user,req.query.subInterest).then((data)=>{
@@ -95,7 +105,7 @@ const selectSubInterest=async(req,res)=>{
             
         }
         else{
-            res.json("already in interest")
+            res.json("Already added in interest")
         }
     })
   

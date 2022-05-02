@@ -5,7 +5,7 @@ const messages=require('../model/message')
 const users=require('../services/user')
 const friends=require('../services/friend')
 const chats=require('../services/chat');
-const { find } = require("../model/friendRequest");
+//const { find } = require("../model/friendRequest");
 //const { response } = require("express");
 
 
@@ -39,7 +39,7 @@ const sendMessage=async(req,res)=>{
                             if(result){
                                 const data={roomId:result.roomId,
                                     sentTo:req.query.sentTo,
-                                    message:req.body.msg,
+                                    message:req.query.msg,
                                     sentBy:req.user
                                 }
                                 users.create(messages,data).then(result=>{

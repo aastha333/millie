@@ -4,43 +4,63 @@ const users=require('../services/user')
 const friends=require('../services/friend')
 
 const sendRequest=async(req,res)=>{
-    users.findUser(friendRequest,req.user).then((result)=>{
-        if(result){
-            friends.update(friendRequest,req.user,{requests:req.query.request}).then((value)=>{
-                if(value){
-                    res.json(value)
-                }
-                else{
-                    res.json("Request failed")
-                }
-            })
-        }
-        else{
-            const data={
-                user:req.user,
-                requests:req.query.request
+   friends.findFriend(friend,req.user,req.query.request).then(data=>{
+       if(!data){
+        friends.findRequest(req.user,req.query.request).then((result)=>{
+            if(result){
+                friends.push(friendRequest,req.user,{requests:req.query.request}).then((value)=>{
+                    if(value){
+                        res.json(value)
+                    }
+                    else{
+                        res.json("Request failed")
+                    }
+                })
             }
-            users.create(friendRequest,data).then((value)=>{
-                if(value){
-                    res.json(value)
-                }
-                else{
-                    res.json("Request failed")
-                }
-            })
-        }
-    })
+            else{
+                friends.findFriend(friendRequest,req.user,req.query.request).then((result)=>{
+                    if(!result){
+                        const data={
+                            user:req.user,
+                            requests:req.query.request
+                        }
+                        users.create(friendRequest,data).then((value)=>{
+                            if(value){
+                                res.json(value)
+                            }
+                            else{
+                                res.json("Request failed")
+                            }
+                        })
+                    }
+                    else{
+                        res.json("Already Requested")
+                    }
+                    
+                })
+
+            }
+        })
+       }
+       else{
+           res.json("Already friends")
+       }
+    
+   })
+    
 }
 const acceptRequest=async(req,res)=>{
+    
     friends.pull(friendRequest,req.user,{requests:req.query.acceptRequest}).then((value)=>{
         //console.log("blabla")
         if(value){
 
-            //console.log("kll")
+            //console.log(value)
             users.findUser(friend,req.user).then(result=>{
                 if(result){
+                    //console.log(result)
                     friends.push(friend,req.user,{friends:req.query.acceptRequest}).then(data=>{
-                        console.log("ghjj")
+                       // console.log(data)
                         res.json(data)
                     })             
                  }
@@ -55,7 +75,7 @@ const acceptRequest=async(req,res)=>{
             
         }
         else{
-            res.json("no friendRequest is there")
+            res.json("No friendRequest is there")
         }
     })
 }
@@ -65,14 +85,15 @@ const rejectRequest=async(req,res)=>{
             res.json("Rejected")
         }
         else{
-            res.json("not Rejected Please try again")
+            res.json("Not Rejected Please try again")
         }
     })
 }
 const getRequest=async(req,res)=>{
     friends.get(friendRequest,req.user,'requests').then(value=>{
         if(value){
-            paginate(value,3,req.query.page)
+            res.json(value)
+            //,3,req.query.page)
         }
         else{
             res.json("No pending Request")
@@ -82,7 +103,9 @@ const getRequest=async(req,res)=>{
 const getFriend=async(req,res)=>{
     friends.get(friend,req.user,'friends').then(value=>{
         if(value){
-            paginate(value)
+            //res.json(value)
+            const data=paginate(value.friends,3,req.query.page)
+            res.json(data)
         }
         else{
             res.json("No friends")
@@ -91,7 +114,13 @@ const getFriend=async(req,res)=>{
 }
 function paginate(array, page_size, page_number) {
     // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
-    return array.toString().slice((page_number - 1)*page_size , page_number*page_size);
+    const result= array.slice((page_number - 1)*page_size , page_number*page_size);
+    if(result){
+        return result
+    }
+    else{
+        return 0
+    }
   }
 module.exports={
     sendRequest,

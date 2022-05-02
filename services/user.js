@@ -131,7 +131,7 @@ const updateQuery=(Model,email,data)=>{
    // })
 }
 const findUser=(Model,id)=>{
-    const result=Model.findOne({userId:id})
+    const result=Model.findOne({user:id})
     if(result){
         return result
     }

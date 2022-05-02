@@ -6,23 +6,23 @@ const {ObjectId}=require("bson")
 //const res = require('express/lib/response')
 //const res = require('express/lib/response')
 
-const update=async(Model,id,data)=>{
-    try{
-        const result=Model.findOneAndUpdate({user:id,$push:data},{new:true})
-        if(result!=null){
-            return result
-        }
-        else{
-            return 0
-        }
-    }
-    catch(err){
+// const update=async(Model,id,data)=>{
+//     try{
+//         const result=Model.findOneAndUpdate({user:id,$push:data},{new:true})
+//         if(result!=null){
+//             return result
+//         }
+//         else{
+//             return 0
+//         }
+//     }
+//     catch(err){
 
-    }
-}
+//     }
+// }
 const pull=async(Model,id,data)=>{
     try{
-    const result=Model.findOneAndUpdate({user:id,$pull:data},{new:true})
+    const result=Model.findOneAndUpdate({user:id,$pull:data})
         if(result!=null){
             return result
         }
@@ -36,7 +36,7 @@ const pull=async(Model,id,data)=>{
 }
 const push=async(Model,id,data)=>{
     try{
-    const result=Model.findOneAndUpdate({user:id,$push:data},{new:true})
+    const result=Model.findOneAndUpdate({user:id,$push:data})
         if(result!=null){
             return result
         }
@@ -54,14 +54,6 @@ const get=async(Model,id,data)=>{
        const result= Model.findOne({user:id}).select({data:1,'_id':0})
         .populate({
             path:data,
-            //select:{'firstName':1,'lastName':1},
-            //perDocumentLimit:2
-            // options: {
-            //     limit: 3,
-            //     //sort: { created: -1},
-            //     skip: req.params.page*3
-        
-            // }
         })
         if(result!=null){
             return result
@@ -74,9 +66,25 @@ const get=async(Model,id,data)=>{
         res.json(err)
     }
 }
-const findFriend=(user,id)=>{
+const findFriend=(Model,user,id)=>{
     try{
-        const result=friend.findOne({user:ObjectId(user),friends:ObjectId(id)})
+        const result=Model.findOne({user:user,friends:{$in:id}})
+        //console.log(result)
+        if(result!=null){
+            return result
+        }
+        else{
+            return 0
+        }
+    }
+    catch(err){
+        res.json(err)
+    }
+}
+
+const findRequest=(user,id)=>{
+    try{
+        const result=friendRequest.findOne({user:user,requests:{$nin:id}})
         //console.log(result)
         if(result!=null){
             return result
@@ -90,9 +98,10 @@ const findFriend=(user,id)=>{
     }
 }
 module.exports={
-    update,
+    //update,
     push,
     pull,
     get,
-    findFriend
+    findFriend,
+    findRequest
 }

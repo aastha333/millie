@@ -60,11 +60,14 @@ const userProfileSchema = new mongoose.Schema({
     },
     interest:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'interest'
+        ref:'interest',
+        //validate: [arrayLimit, '{PATH} exceeds the limit of 4']
     }],
     subInterest:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'subInterest'
+        ref:'subInterest',
+        //validate: [arrayLimit, '{PATH} exceeds the limit of 4']
+
     }],
     privacyPolicy:{
         type:Boolean,
@@ -78,7 +81,15 @@ const userProfileSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
-   
+    
 })
+
+// Validations for assignedTo employees' size
+userProfileSchema.path('interest').validate(function (value) {
+    console.log(value.length)
+    if (value.length > 4) {
+      throw new Error("Assigned person's size can't be greater than 4!");
+    }
+  });
 
 module.exports= mongoose.model("userProfile",userProfileSchema)

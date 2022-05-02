@@ -41,9 +41,10 @@ const selectSub=(user,subInterest)=>{
         })
     })
 }
-const findInterest=(id,interest)=>{
-    const result=userProfile.findOne({_id:id,interest:interest})
-    if(result){
+const findInterest=(id,int)=>{
+    const result=userProfile.findOne({_id:id,'interest':{$in:int}})
+    //console.log(result)
+    if(result!=null){
         return result
     }
     else{
@@ -51,8 +52,8 @@ const findInterest=(id,interest)=>{
     }
 }
 const findSubInterest=(id,interest)=>{
-    const result=userProfile.findOne({_id:id,subInterest:interest})
-    if(result){
+    const result=userProfile.findOne({_id:id,'subInterest':{$in:interest}})
+    if(result!=null){
         return result
     }
     else{
