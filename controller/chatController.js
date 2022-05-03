@@ -11,14 +11,15 @@ const chats=require('../services/chat');
 
 const sendMessage=async(req,res)=>{
     try{
-        friends.findFriend(req.user,req.query.sentTo).then(value=>{
+        friends.findFriend(friend,req.user,req.query.sentTo).then(value=>{
             if(value){
                 chats.findRoom(req.user,req.query.sentTo).then(data=>{
                     if(data){
                         //console.log(data.roomId)
                         //const msg=req.body.msg
                         //console.log(msg)
-                        const val={roomId:data.roomId,
+                        const val={
+                            roomId:data.roomId,
                             sentTo:req.query.sentTo,
                             message:req.body.msg,
                             sentBy:req.user
@@ -39,7 +40,7 @@ const sendMessage=async(req,res)=>{
                             if(result){
                                 const data={roomId:result.roomId,
                                     sentTo:req.query.sentTo,
-                                    message:req.query.msg,
+                                    message:req.body.msg,
                                     sentBy:req.user
                                 }
                                 users.create(messages,data).then(result=>{

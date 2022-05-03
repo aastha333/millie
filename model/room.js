@@ -1,10 +1,12 @@
 const mongoose = require('mongoose'),
 Schema = mongoose.Schema;
-let counter = 1;
-let CountedId = {type: Number, default: () => counter++};
+
 
 const roomSchema = new Schema({
-    roomId: CountedId ,
+    roomId:{
+        type:Number,
+        default:1
+    } ,
     user1:{
         type: Schema.Types.ObjectId,
         ref: 'userProfile'

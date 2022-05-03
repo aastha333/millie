@@ -92,8 +92,8 @@ const rejectRequest=async(req,res)=>{
 const getRequest=async(req,res)=>{
     friends.get(friendRequest,req.user,'requests').then(value=>{
         if(value){
-            res.json(value)
-            //,3,req.query.page)
+            const data=paginate(val,3,req.query.page)
+            res.json(data)
         }
         else{
             res.json("No pending Request")
@@ -104,13 +104,30 @@ const getFriend=async(req,res)=>{
     friends.get(friend,req.user,'friends').then(value=>{
         if(value){
             //res.json(value)
-            const data=paginate(value.friends,3,req.query.page)
-            res.json(data)
+            const val=search(value.friends,req.query.search)
+            console.log(val)
+            res.json(val)
+            //const data=paginate(val,3,req.query.page)
+            //res.json(data)
         }
         else{
             res.json("No friends")
         }
     })
+}
+function search(array,search){
+    //console.log(array[0]._id)
+    array.forEach(element => {
+        const result=array.includes(search);
+    });
+    //const result=array.includes(search);
+    //console.log(result)
+    if(result){
+        return result
+    }
+    else{
+        return 0
+    }
 }
 function paginate(array, page_size, page_number) {
     // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
