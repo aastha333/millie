@@ -3,9 +3,8 @@ const mongoose = require('mongoose'),
 
 const MessageSchema = new Schema({
   roomId:{
-    //$inc: { seq: 1 } 
-    type:Number
-    //default:1
+    type:Schema.Types.ObjectId,
+    ref:'room'
  },
   sentTo: {
     type: Schema.Types.ObjectId,

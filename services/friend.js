@@ -51,7 +51,8 @@ const push=async(Model,id,data)=>{
 
 const get=async(Model,id,data)=>{
     try{
-       const result= Model.findOne({user:id}).select({data:1,'_id':0})
+       const result= Model.findOne({user:id})
+       .select({data:1,'_id':0})
         .populate({
             path:data,
         })

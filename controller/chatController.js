@@ -19,7 +19,7 @@ const sendMessage=async(req,res)=>{
                         //const msg=req.body.msg
                         //console.log(msg)
                         const val={
-                            roomId:data.roomId,
+                            roomId:data._id,
                             sentTo:req.query.sentTo,
                             message:req.body.msg,
                             sentBy:req.user
@@ -38,7 +38,7 @@ const sendMessage=async(req,res)=>{
                     else{
                         users.create(room,{user1:req.user,user2:req.query.sentTo}).then(result=>{
                             if(result){
-                                const data={roomId:result.roomId,
+                                const data={roomId:result._id,
                                     sentTo:req.query.sentTo,
                                     message:req.body.msg,
                                     sentBy:req.user
@@ -85,7 +85,9 @@ const getMessage=(req,res)=>{
 }
 const chatHistory=async(req,res)=>{
     try{
-        chats.findChat(req.user).then(data=>{
+        chats.findChat(req.user)
+        //.populate(data)
+        .then(data=>{
             if(data){
                 res.json(data)
             }

@@ -3,10 +3,10 @@ Schema = mongoose.Schema;
 
 
 const roomSchema = new Schema({
-    roomId:{
-        type:Number,
-        default:1
-    } ,
+    // roomId:{
+    //     type:Number,
+    //     default:1
+    // } ,
     user1:{
         type: Schema.Types.ObjectId,
         ref: 'userProfile'

@@ -27,6 +27,7 @@ const findMsg=(id)=>{
 }
 const findChat=(id)=>{
     const result=message.find({sentBy:id}).distinct('roomId')
+    //.populate()
     if(result){
         return result
     }
